@@ -1,0 +1,258 @@
+{
+  "name": "interview-mock trigger and behavior evals",
+  "description": "Prompt-only evals for the interview-mock skill, covering trigger boundaries and core one-question-at-a-time interview behavior.",
+  "evals": [
+    {
+      "name": "trigger_for_go_specialty_mock_interview",
+      "description": "用户要求 Go 专项模拟面试时，应触发 interview-mock，并先给出难度等级选择。",
+      "prompt": "我想练一下 Go 后端高级开发面试，按大厂 P7 标准来拷打我，一个问题一个问题问。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "skill": "interview-mock",
+        "must_include": [
+          "先输出难度等级选项",
+          "包含中级冲刺、高级稳定、资深/P7、高压专家",
+          "说明薪资范围只是面试难度粗略参考"
+        ],
+        "must_not_do": [
+          "直接开始问 Go 题",
+          "一次性列出多道题",
+          "在第一题前跳过难度选择"
+        ]
+      }
+    },
+    {
+      "name": "trigger_for_jd_based_realistic_interview",
+      "description": "用户给出 JD 并要求真实模拟面试时，应触发 interview-mock，但仍先要求选择难度。",
+      "prompt": "这是一个 AI Agent 平台后端岗位 JD，我想按真实面试流程完整模拟一下，要求难度对标 P7。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "skill": "interview-mock",
+        "must_include": [
+          "先输出难度等级选项",
+          "包含中级冲刺、高级稳定、资深/P7、高压专家",
+          "用户选择难度后再选择 A-H 流程"
+        ],
+        "must_not_do": [
+          "因为用户已经提到 JD 就直接开始",
+          "把 JD 分析结果替代流程选择",
+          "一次性给出完整面试题库"
+        ]
+      }
+    },
+    {
+      "name": "trigger_for_system_design_specialty_mock_interview",
+      "description": "用户要求系统设计专项模拟面试时，应触发 interview-mock，并先给出难度等级选择。",
+      "prompt": "我想练一下系统设计专项，按 P7 标准一个问题一个问题拷打我。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "skill": "interview-mock",
+        "must_include": [
+          "先输出难度等级选项",
+          "包含中级冲刺、高级稳定、资深/P7、高压专家",
+          "说明选择难度后再选择专项和题型模式"
+        ],
+        "must_not_do": [
+          "直接开始问系统设计题",
+          "一次性列出多个系统设计题",
+          "在第一题前跳过难度选择"
+        ]
+      }
+    },
+    {
+      "name": "ask_specialty_after_difficulty_selection",
+      "description": "用户选择难度后，应继续要求选择 A-H 专项流程。",
+      "prompt": "我选择 A 中级冲刺。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "skill": "interview-mock",
+        "must_include": [
+          "请选择本次模拟面试流程",
+          "Go 语言专项",
+          "MySQL 专项",
+          "Redis 专项",
+          "系统设计专项",
+          "根据 JD 整体真实模拟面试"
+        ],
+        "must_not_do": [
+          "直接开始问第一题",
+          "跳过 A-H 专项流程选择",
+          "按 P7 固定标准开始提问"
+        ]
+      }
+    },
+    {
+      "name": "ask_question_type_mode_after_specialty_selection",
+      "description": "用户选择专项后，不应直接开始第一题，应继续要求选择题型模式。",
+      "prompt": "难度选择 A 中级冲刺，专项选择 B，开始 MySQL 专项。你就像真实面试官一样问我。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "请选择本次题型模式",
+          "实战题模式",
+          "八股题模式",
+          "混合模式"
+        ],
+        "must_not_do": [
+          "直接开始问 MySQL 题",
+          "一次性输出多道 MySQL 问题",
+          "跳过题型模式选择"
+        ]
+      }
+    },
+    {
+      "name": "one_question_without_hinting_after_mode_selection",
+      "description": "用户已选择专项和题型模式后，每次只问一个问题，问题中不能泄露答题方向。",
+      "prompt": "难度选择 A 中级冲刺，专项选择 B，题型模式选择 1 实战题模式，开始 MySQL 专项。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "只输出一个符合中级冲刺难度的 MySQL 实战面试问题",
+          "问题后追加固定提示语：你直接开始答。或者选择如下选项：A 如果卡住，就说“提示一下”。B 如果想看标准答案，就说“给我标准答案”。"
+        ],
+        "must_not_do": [
+          "一次性输出多道 MySQL 问题",
+          "在问题里写可以从索引、事务、锁、SQL 优化等方面回答",
+          "给出答案框架或标准答案",
+          "继续要求选择题型模式",
+          "按 P7 固定标准出题"
+        ]
+      }
+    },
+    {
+      "name": "feedback_then_ask_to_save_study_material",
+      "description": "用户答完后，应先点评，再询问是否把这道题整理成学习资料写入文件。",
+      "prompt": "我的回答是：Redis 热 key 我一般会加本地缓存，然后扩容 Redis 集群，必要时做限流。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "结论",
+          "亮点",
+          "缺口",
+          "是否需要把这个问题整理成学习资料写入文件"
+        ],
+        "must_not_do": [
+          "只说回答不错",
+          "不指出当前难度标准下的缺口",
+          "忘记询问是否整理成学习资料写入文件"
+        ]
+      }
+    },
+    {
+      "name": "saving_numbered_question_must_delegate_to_background_subagent",
+      "description": "用户用题号要求沉淀到文档时，必须委派后台子 Agent，主会话不能直接写入。",
+      "prompt": "沉淀第三题到文档中，然后继续下一题。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "skill": "interview-mock",
+        "must_include": [
+          "强制触发后台子 Agent 执行写入任务",
+          "任务说明包含第三题的题目上下文和目标文档",
+          "主会话只简短确认已安排后台子 Agent 写入",
+          "主线程继续模拟面试",
+          "后台子 Agent 只追加不修改已有内容"
+        ],
+        "must_not_do": [
+          "主会话直接生成学习资料正文",
+          "主会话直接写入或修改文档",
+          "因为写入学习资料而暂停继续面试",
+          "把第三题合并进已有题目"
+        ]
+      }
+    },
+    {
+      "name": "study_material_bolds_key_points",
+      "description": "用户要求把面试题整理成学习资料时，应使用模板并对重点内容加粗。",
+      "prompt": "需要，把刚才这道 Redis 热 key 的问题整理成学习资料写入文件。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "skill": "interview-mock",
+        "must_include": [
+          "强制触发后台子 Agent 执行写入任务",
+          "读取并使用 assets/review-note-template.md",
+          "对核心结论、关键术语、机制名称、风险边界和追问考点做 Markdown 加粗",
+          "不要整段加粗",
+          "主线程继续模拟面试"
+        ],
+        "must_not_do": [
+          "在主线程里长时间展开写入流程导致面试中断",
+          "只写纯文本学习资料",
+          "忽略重点内容加粗",
+          "把整段内容全部加粗"
+        ]
+      }
+    },
+    {
+      "name": "study_material_appends_new_question_without_rewriting_existing_content",
+      "description": "用户要求沉淀新问题到已有学习资料时，只能追加新问答，不能修改已有内容。",
+      "prompt": "把刚才由 Redis 热 key 追问出来的本地缓存一致性问题也沉淀到已有学习资料里。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "skill": "interview-mock",
+        "must_include": [
+          "强制触发后台子 Agent 执行写入任务",
+          "在已有学习资料文档末尾追加新的完整问答条目",
+          "追问出来的问题也作为新的独立问答追加",
+          "不修改原文档中已经存在的内容",
+          "主线程继续模拟面试"
+        ],
+        "must_not_do": [
+          "在主线程里改写学习资料导致面试中断",
+          "改写已有 Redis 热 key 条目",
+          "把新追问合并进原问题",
+          "重排或补全原文档已有内容"
+        ]
+      }
+    },
+    {
+      "name": "classify_practical_and_foundation_questions_when_saving",
+      "description": "用户要求区分实战题和八股题并沉淀到学习资料或 skill 中时，应使用题型分类规则。",
+      "prompt": "我想把所有专项里的实战问题和八股问题分开总结到学习资料里。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "skill": "interview-mock",
+        "must_include": [
+          "读取并使用 references/question-taxonomy.md",
+          "区分实战题、八股题、机制追问题",
+          "所有专项都适用该分类",
+          "沉淀时把题型分类写进问题小标题",
+          "说明判断依据",
+          "问题本身不泄露答题方向或优化手段"
+        ],
+        "must_not_do": [
+          "把所有问题都当成八股题",
+          "把机制追问题合并回原问题",
+          "在面试问题中写出游标分页、子查询优化等答案关键词",
+          "新增单独的 ## 题型分类 字段",
+          "沉淀时遗漏标题里的题型前缀"
+        ]
+      }
+    },
+    {
+      "name": "do_not_trigger_for_transcript_review",
+      "description": "用户要求复盘已有面试转写稿时，不应触发 interview-mock，应交给 interview-transcript-review。",
+      "prompt": "这是我昨天模拟面试的视频转写稿，请帮我逐题复盘，看看哪些题答得不好。",
+      "expected_behavior": {
+        "should_trigger": false,
+        "preferred_skill": "interview-transcript-review",
+        "must_include": [
+          "识别为已有面试转写稿复盘",
+          "不进入现场模拟面试一问一答流程"
+        ]
+      }
+    },
+    {
+      "name": "do_not_trigger_for_general_study_notes",
+      "description": "用户只想整理知识点或学习笔记时，不应触发 interview-mock。",
+      "prompt": "帮我整理一份 MySQL 锁和事务的学习笔记，适合后面背诵。",
+      "expected_behavior": {
+        "should_trigger": false,
+        "must_not_do": [
+          "启动模拟面试",
+          "要求用户选择 A-H 流程",
+          "按面试官口吻提问"
+        ]
+      }
+    }
+  ]
+}

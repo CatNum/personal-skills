@@ -1,0 +1,32 @@
+{
+  "name": "catnum-personal-skills",
+  "owner": {
+    "name": "CatNum"
+  },
+  "metadata": {
+    "description": "CatNum personal Agent Skills",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "interview-skills",
+      "description": "Mock interview and interview transcript review skills",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/interview-mock",
+        "./skills/interview-transcript-review"
+      ]
+    },
+    {
+      "name": "content-skills",
+      "description": "Markdown formatting and course transcript refinement skills",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/md-formatting",
+        "./skills/transcript-refine"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,267 @@
+{
+  "name": "interview-transcript-review trigger and behavior evals",
+  "description": "Prompt-only evals for the interview-transcript-review skill, covering trigger boundaries and core output behavior.",
+  "evals": [
+    {
+      "name": "trigger_for_mock_interview_transcript_review",
+      "description": "用户提供模拟面试转写稿并要求复盘时，应触发 interview-transcript-review。",
+      "prompt": "这是我昨天模拟 Go 后端一面的转写稿，内容是面试官和我一问一答的 Markdown。请帮我做一次面试复盘，指出哪些题答得不好、面试官考点是什么、下一步怎么补。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "skill": "interview-transcript-review",
+        "must_include": [
+          "识别输入为真实模拟面试或模拟面试视频转写稿",
+          "进入面试转写稿复盘流程",
+          "围绕回答质量、面试官考点、评分、短板和改进方向产出复盘"
+        ]
+      }
+    },
+    {
+      "name": "do_not_trigger_for_course_or_livestream_transcript_study_notes",
+      "description": "用户要求课程或直播转写稿学习整理时，不应触发本 skill，应交给 transcript-refine。",
+      "prompt": "这是一个 Go 性能优化直播课的完整转写稿，请帮我整理成适合学习的笔记，保留知识点顺序，去掉口水话，补充章节标题。",
+      "expected_behavior": {
+        "should_trigger": false,
+        "preferred_skill": "transcript-refine",
+        "must_include": [
+          "识别为课程或直播转写稿学习整理",
+          "不进入面试复盘、评分或短板卡片流程",
+          "应由 transcript-refine 处理学习笔记精炼"
+        ]
+      }
+    },
+    {
+      "name": "ask_output_format_without_default",
+      "description": "开始流程时必须询问输出格式，只提供三个选择且不设置默认值。",
+      "prompt": "我有一份模拟面试转写稿 @interview.md，帮我复盘一下。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_ask_before_processing": [
+          "请选择输出格式：仅 Markdown、仅 HTML、Markdown + HTML"
+        ],
+        "must_not_do": [
+          "提供第四种输出格式选项",
+          "默认选择 Markdown",
+          "默认选择 HTML",
+          "在用户选择输出格式前直接生成最终复盘文件"
+        ]
+      }
+    },
+    {
+      "name": "resume_jd_and_interview_metadata_are_optional",
+      "description": "简历、JD、面试基础信息是建议材料，不是必填；缺少时继续流程并标注限制。",
+      "prompt": "我只有这份技术面试转写稿，没有简历、JD、轮次信息。请输出 Markdown 复盘。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "继续处理面试转写稿",
+          "提醒简历、岗位 JD、面试类型、轮次、目标岗位、面试时间或批次可作为补充上下文",
+          "在复盘中标注缺少建议材料带来的分析限制"
+        ],
+        "must_not_do": [
+          "要求用户必须先提供简历",
+          "要求用户必须先提供岗位 JD",
+          "因为缺少面试基础信息而中止流程"
+        ]
+      }
+    },
+    {
+      "name": "readability_cleanup_only_for_unformatted_source",
+      "description": "原稿无格式时，只做可读化清洗，不做模板化结构化，不改写原意。",
+      "prompt": "这份模拟面试原稿完全没格式，都是一大段 ASR 文本。你先在原文上整理一下，让它能读，再做复盘。不要把我的回答润色成标准答案。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "source_cleanup_rules": [
+          "只整理自然说话段落、标点、换行、断句",
+          "只修正识别错字、拼写、英文缩写、技术术语、专有名词和术语写法",
+          "保留原始问答顺序和原意"
+        ],
+        "must_not_do": [
+          "把原回答改写成标准答案",
+          "强制拆成第 N 题 / 面试官 / 候选人 / 追问的模板结构",
+          "在原稿中加入评分、短板、补充答案或复盘结论",
+          "删除会影响复盘判断的错误表达、犹豫、遗漏和逻辑断裂"
+        ]
+      }
+    },
+    {
+      "name": "review_output_must_be_new_file_with_expected_name",
+      "description": "复盘文件必须新建，并按原文件名派生命名。",
+      "prompt": "请基于 @backend-interview.md 生成复盘，我选择 Markdown + HTML。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_create_files": [
+          "backend-interview-复盘.md",
+          "backend-interview-复盘.html"
+        ],
+        "must_include": [
+          "复盘文件新建，不能覆盖原稿",
+          "Markdown 与 HTML 内容结构一致，HTML 只增强视觉层级"
+        ],
+        "must_not_do": [
+          "覆盖 backend-interview.md",
+          "把复盘内容直接写回原稿"
+        ]
+      }
+    },
+    {
+      "name": "each_question_contains_required_review_fields",
+      "description": "每道题都必须包含面试官考点、面试官/公司视角、回答评分、项目经验方向、技术扩展方向。",
+      "prompt": "我选择仅 Markdown。请把 @go-mock-interview.md 做成复盘，每一题都要能看出为什么扣分，以及后面怎么补。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "per_question_required_fields": [
+          "面试官考点",
+          "面试官/公司视角",
+          "回答评分",
+          "项目经验方向",
+          "技术扩展方向"
+        ],
+        "scoring_values": [
+          "通过",
+          "勉强通过",
+          "不通过"
+        ],
+        "must_include": [
+          "项目经验方向说明真实项目背景、动作、结果和边界；缺少时明确本次面试未体现或过往项目未直接涉及",
+          "技术扩展方向补充技术知识、原理机制、设计方案、优缺点、适用场景和追问方向"
+        ]
+      }
+    },
+    {
+      "name": "conceptual_workflow_and_ai_trend_questions_use_collaboration_direction",
+      "description": "当面试问题涉及工作流程、AI 趋势、工程理念、团队协作或职业判断时，应补充理念与协作方向，而不是只套项目经验和技术扩展两栏。",
+      "prompt": "我选择仅 Markdown。请复盘 @ai-workflow-interview.md。里面有一段面试官问我：你怎么看 AI 对研发流程的影响？你在团队里会如何推动 AI 工具落地？这类问题不是具体技术原理，也不是某个项目经历，请重点指出我这类回答的问题。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "识别该题属于工作流程、AI 趋势、工程理念、团队协作或职业判断类交流",
+          "在该题复盘中补充理念与协作方向",
+          "理念与协作方向包含观点、判断依据、真实工作方法、取舍边界和下次表达抓手",
+          "评分时考虑观点清晰度、现实约束、落地方法和表达稳定性"
+        ],
+        "must_not_do": [
+          "只用项目经验方向和技术扩展方向硬套该题",
+          "把理念类回答写成空泛口号",
+          "编造不存在的团队 AI 落地经历"
+        ]
+      }
+    },
+    {
+      "name": "capture_interviewer_and_company_perspective",
+      "description": "当面试官在讨论中表达自己的观点、公司当前观念、团队偏好或评价视角时，复盘应明确记录面试官/公司视角。",
+      "prompt": "请复盘 @platform-interview.md。里面面试官有一段说他们公司现在更关注 AI 工具落地后的研发流程变化，也更看重候选人能不能把工具变成团队效率，而不是只会个人使用。请把这部分也写进复盘。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "在相关题目中记录面试官/公司视角",
+          "区分候选人回答和面试官表达的观点",
+          "说明该视角暴露出的公司关注点、团队偏好或评价倾向",
+          "结合该视角说明下次回答如何贴近对方语境"
+        ],
+        "must_not_do": [
+          "忽略面试官表达的公司观念",
+          "把面试官观点误写成候选人的回答",
+          "臆测转写稿中没有体现的公司内部事实"
+        ]
+      }
+    },
+    {
+      "name": "bad_answers_include_root_cause_and_future_strategy",
+      "description": "答得不好的问题不仅要补答案，还要分析答不好原因，并给出以后遇到类似情况的作答策略。",
+      "prompt": "请复盘 @bad-answer-interview.md。对答得不好的题目，不要只给我标准答案，我还想知道我为什么答不好，以及以后遇到同类问题该怎么组织回答。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "答不好原因",
+          "类似情况作答策略",
+          "分析是否没听懂考点、没有回应面试官视角、缺少结构、缺少例子、概念错误、边界不清或表达过散",
+          "给出下一次可复用的作答步骤或表达结构"
+        ],
+        "must_not_do": [
+          "只生成简单精炼版答案和详细面试版答案",
+          "只评价回答差，不说明本质原因",
+          "不给同类问题的下一次作答策略"
+        ]
+      }
+    },
+    {
+      "name": "do_not_generate_reusable_answer_material_section",
+      "description": "复盘不能生成“可复用回答素材”章节。",
+      "prompt": "请复盘 @hr-tech-interview.md，把所有问题按答得好和答得差分组，给评分、短板卡片和复习计划。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "逐题复盘",
+          "短板卡片",
+          "下次面试优先背诵版",
+          "建议复习顺序"
+        ],
+        "must_not_include": [
+          "可复用回答素材",
+          "答得还可以的问题",
+          "答得不好的问题"
+        ],
+        "must_not_do": [
+          "新增名为可复用回答素材的章节",
+          "把复盘产物改造成通用素材库",
+          "把题目拆成答得还可以和答得不好的两个章节"
+        ]
+      }
+    },
+    {
+      "name": "review_output_uses_six_section_study_structure",
+      "description": "复盘文档应使用重点、面试概览、逐题复盘、短板卡片、下次面试优先背诵版、建议复习顺序的六段结构。",
+      "prompt": "请基于 @fde-interview.md 生成 Markdown 复盘。我希望结构适合后续复习和背诵，不要分散成很多小章节。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "required_sections": [
+          "## 重点",
+          "## 一、面试概览",
+          "## 二、逐题复盘",
+          "## 三、短板卡片",
+          "## 四、下次面试优先背诵版",
+          "## 五、建议复习顺序"
+        ],
+        "must_include": [
+          "逐题复盘中每题包含评价、现场表现、简单精炼版和下次可这样答或详细面试版答案",
+          "下次面试优先背诵版沉淀最高优先级的可口述答案",
+          "建议复习顺序按照优先级组织复习动作"
+        ],
+        "must_not_do": [
+          "生成独立的答得还可以的问题章节",
+          "生成独立的答得不好的问题章节",
+          "用下一步复习计划替代建议复习顺序"
+        ]
+      }
+    },
+    {
+      "name": "overview_includes_time_and_question_fields_follow_rule_order",
+      "description": "面试概览应包含面试时间/批次；逐题复盘字段顺序应与逐题复盘规则一致。",
+      "prompt": "请基于 @round2-interview.md 生成 Markdown + HTML 复盘。面试基础信息里有：技术二面，2026-06 批次。请保证每题复盘字段顺序统一。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "面试时间/批次",
+          "逐题复盘字段顺序与规则一致",
+          "原文位置",
+          "评价",
+          "面试官考点",
+          "面试官/公司视角",
+          "回答方向",
+          "现场表现",
+          "项目经验方向",
+          "技术扩展方向",
+          "理念与协作方向",
+          "简单精炼版",
+          "下次可这样答 / 详细面试版答案"
+        ],
+        "must_not_do": [
+          "遗漏面试时间或批次",
+          "让 Markdown 和 HTML 模板使用不同字段顺序",
+          "把评价放在面试官考点之后"
+        ]
+      }
+    }
+  ]
+}
