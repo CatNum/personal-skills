@@ -1,0 +1,121 @@
+{
+  "name": "transcript-refine trigger and behavior evals",
+  "description": "Prompt-only scenarios for the two transcript modes and handoffs.",
+  "evals": [
+    {
+      "name": "interview_cleanup_then_review_handoff",
+      "description": "原稿无格式时，只做可读化清洗，不做模板化结构化，不改写原意。",
+      "prompt": "这份模拟面试原稿完全没格式，都是一大段 ASR 文本。你先在原文上整理一下，让它能读，再做复盘。不要把我的回答润色成标准答案。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "source_cleanup_rules": [
+          "只整理自然说话段落、标点、换行、断句",
+          "只修正识别错字、拼写、英文缩写、技术术语、专有名词和术语写法",
+          "保留原始问答顺序和原意"
+        ],
+        "must_not_do": [
+          "把原回答改写成标准答案",
+          "强制拆成第 N 题 / 面试官 / 候选人 / 追问的模板结构",
+          "在原稿中加入评分、短板、补充答案或复盘结论",
+          "删除会影响复盘判断的错误表达、犹豫、遗漏和逻辑断裂"
+        ],
+        "cleanup_skill": "transcript-refine",
+        "must_include": [
+          "用户明确要求原文件清理时遵循请求，复盘仍另存新文件",
+          "不重复维护面试清理规则"
+        ],
+        "skill": "transcript-refine",
+        "review_skill": "document-writing"
+      }
+    },
+    {
+      "name": "interview_cleanup_only",
+      "prompt": "只清理 interview.md：面试官：Redis单线程为什么还有并发问题？候选人：呃，我觉得完全不会有并发问题吧，那个，我不确定。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "另存 interview-清理.md",
+          "保留错误判断、口头禅及不确定性",
+          "保留问答顺序"
+        ],
+        "must_not_do": [
+          "更正候选人知识错误",
+          "加入重点或评分",
+          "调用复盘成文流程"
+        ]
+      }
+    },
+    {
+      "name": "ambiguous_transcript_mode",
+      "prompt": "整理这段转写稿：Redis是什么？单线程是不是就没有并发问题？",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "判断用途不明且影响删改范围时询问",
+          "确认前仅作保守分段标点整理"
+        ],
+        "must_not_do": [
+          "武断删除犹豫或重复",
+          "自动补成标准教程"
+        ]
+      }
+    },
+    {
+      "name": "course_first_study_and_sources",
+      "prompt": "精炼 course.md：先讲缓存减少重复计算；用书放桌上的例子解释；后来从固定过期改成按访问续期，原因是热点内容被误删；具体代码见同目录demo.py。要阅读稿和口播稿。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "读取课程细则并扫描相关证据",
+          "保留例子、演进原因及新方案影响",
+          "阅读稿与口播稿分文件",
+          "由document-writing组织统一格式"
+        ],
+        "must_not_do": [
+          "套面试评分",
+          "编造没读取的代码或来源位置"
+        ]
+      }
+    },
+    {
+      "name": "review_only_routes_out",
+      "prompt": "这份面试稿已清理好，请逐题评分、分析考点、生成复盘。",
+      "expected_behavior": {
+        "should_trigger": false,
+        "preferred_skill": "document-writing",
+        "must_not_do": [
+          "重复清理可读原稿"
+        ]
+      }
+    },
+    {
+      "name": "existing_target_preserves_source",
+      "prompt": "只清理 interview.md，目录里已经有 interview-清理.md，未要求覆盖。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "选用不冲突的新清理稿文件名"
+        ],
+        "must_not_do": [
+          "覆盖原稿或已有清理稿"
+        ]
+      }
+    },
+    {
+      "name": "course_source_boundaries",
+      "prompt": "从课件PDF、课堂笔记TXT和demo.py纠正课程转写；材料有不同口径。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "按证据优先级判断并说明差异",
+          "PDF仅页码、TXT仅行号、代码具体定位",
+          "在原主题融合而非重排"
+        ],
+        "must_not_do": [
+          "捏造页码行号",
+          "把PDF标成文本行号"
+        ]
+      }
+    }
+  ]
+}

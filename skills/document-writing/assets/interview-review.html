@@ -34,6 +34,7 @@
       max-width: 1080px;
       margin: 0 auto;
       padding: 40px 24px 64px;
+      overflow-wrap: anywhere;
     }
 
     h1,
@@ -132,6 +133,22 @@
     .shortcoming {
       border-left: 4px solid var(--bad);
     }
+
+    pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    table {
+      width: 100%;
+      table-layout: fixed;
+    }
+
+    @media (max-width: 480px) {
+      main { padding: 24px 12px; }
+      section { padding: 16px 12px; min-width: 0; }
+      .grid { grid-template-columns: minmax(0, 1fr); }
+    }
   </style>
 </head>
 <body>
@@ -160,7 +177,7 @@
         <div class="kv"><strong>总体评分</strong><br><span class="score good">通过</span> <span class="score mid">勉强通过</span> <span class="score bad">不通过</span></div>
       </div>
       <p><strong>岗位 JD 匹配重点：</strong>...</p>
-      <p><strong>回答方向要求：</strong>每题均从项目经验方向和技术扩展方向复盘；涉及流程、协作、AI 趋势、工程理念或职业判断时，补充理念与协作方向。</p>
+      <p><strong>回答方向要求：</strong>技术问题从项目经验与技术扩展方向复盘；涉及流程、协作、AI 趋势或职业判断时补充理念与协作方向，纯 HR 题不硬凑技术内容。</p>
       <p class="muted"><strong>分析限制：</strong>若缺少简历、JD 或面试基础信息，在这里说明限制。</p>
       <p><strong>整体判断：</strong>...</p>
     </section>
@@ -205,7 +222,7 @@
 
     <section class="shortcoming">
       <h2>三、短板卡片</h2>
-      <h3>短板 1：&lt;短板名称&gt;</h3>
+      <h3>3.1 &lt;短板名称&gt;</h3>
       <ul>
         <li><strong>面试暴露：</strong>...</li>
         <li><strong>问题本质：</strong>...</li>
@@ -231,6 +248,7 @@
 
     <section>
       <h2>四、下次面试优先背诵版</h2>
+      <h3>4.1 &lt;高优先级问题/主题&gt;</h3>
       <ul>
         <li><strong>适用场景：</strong>...</li>
         <li><strong>背诵要点：</strong>...</li>

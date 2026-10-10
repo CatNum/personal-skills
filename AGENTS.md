@@ -51,26 +51,26 @@ Usage notes:
 <available_skills>
 
 <skill>
+<name>project-structure</name>
+<description>Use when creating, checking, renaming, or reorganizing project documentation paths under docs, including paired PRD and technical solution files.</description>
+<location>global</location>
+</skill>
+
+<skill>
 <name>interview-mock</name>
 <description>Use for realistic one-question-at-a-time mock interviews with selectable difficulty across Go, MySQL, Redis, system design, engineering, Agent systems, project experience, or full JD-based interviews.</description>
 <location>global</location>
 </skill>
 
 <skill>
-<name>interview-transcript-review</name>
-<description>Use when turning a real technical or HR interview transcript into a retrospective, scoring report, interviewer-intent analysis, answer improvements, and shortcoming cards.</description>
-<location>global</location>
-</skill>
-
-<skill>
-<name>md-formatting</name>
-<description>Use when creating or updating Markdown documents that need normalized headings, a scannable key-points section, and consistent structure.</description>
+<name>document-writing</name>
+<description>Use when writing or updating purpose-specific documents, including interview retrospectives with scoring and answer improvements. Markdown for all types; HTML for interview retrospectives.</description>
 <location>global</location>
 </skill>
 
 <skill>
 <name>transcript-refine</name>
-<description>Use when refining long video or livestream course transcripts into structured first-study reading materials or spoken-script variants.</description>
+<description>Use when cleaning interview transcripts while preserving actual answers, or refining course transcripts into first-study reading materials or spoken scripts.</description>
 <location>global</location>
 </skill>
 

@@ -1,14 +1,14 @@
 {
-  "name": "interview-transcript-review trigger and behavior evals",
-  "description": "Prompt-only evals for the interview-transcript-review skill, covering trigger boundaries and core output behavior.",
+  "name": "document-writing trigger and behavior evals",
+  "description": "Prompt-only scenarios for document writing and interview analysis; run with fixtures or a model, not as executable tests.",
   "evals": [
     {
       "name": "trigger_for_mock_interview_transcript_review",
-      "description": "用户提供模拟面试转写稿并要求复盘时，应触发 interview-transcript-review。",
+      "description": "用户提供模拟面试转写稿并要求复盘时，应触发 document-writing。",
       "prompt": "这是我昨天模拟 Go 后端一面的转写稿，内容是面试官和我一问一答的 Markdown。请帮我做一次面试复盘，指出哪些题答得不好、面试官考点是什么、下一步怎么补。",
       "expected_behavior": {
         "should_trigger": true,
-        "skill": "interview-transcript-review",
+        "skill": "document-writing",
         "must_include": [
           "识别输入为真实模拟面试或模拟面试视频转写稿",
           "进入面试转写稿复盘流程",
@@ -31,19 +31,18 @@
       }
     },
     {
-      "name": "ask_output_format_without_default",
-      "description": "开始流程时必须询问输出格式，只提供三个选择且不设置默认值。",
+      "name": "default_markdown_without_format_gate",
+      "description": "未指定复盘格式时直接生成 Markdown，HTML 和双格式仅按明确请求提供。",
       "prompt": "我有一份模拟面试转写稿 @interview.md，帮我复盘一下。",
       "expected_behavior": {
         "should_trigger": true,
-        "must_ask_before_processing": [
-          "请选择输出格式：仅 Markdown、仅 HTML、Markdown + HTML"
+        "must_include": [
+          "默认生成 interview-复盘.md",
+          "缺少简历JD时继续并说明分析范围"
         ],
         "must_not_do": [
-          "提供第四种输出格式选项",
-          "默认选择 Markdown",
-          "默认选择 HTML",
-          "在用户选择输出格式前直接生成最终复盘文件"
+          "要求先选择输出格式才能继续",
+          "未请求时额外生成 HTML"
         ]
       }
     },
@@ -81,6 +80,11 @@
           "强制拆成第 N 题 / 面试官 / 候选人 / 追问的模板结构",
           "在原稿中加入评分、短板、补充答案或复盘结论",
           "删除会影响复盘判断的错误表达、犹豫、遗漏和逻辑断裂"
+        ],
+        "cleanup_skill": "transcript-refine",
+        "must_include": [
+          "用户明确要求原文件清理时遵循请求，复盘仍另存新文件",
+          "不重复维护面试清理规则"
         ]
       }
     },
@@ -106,16 +110,15 @@
     },
     {
       "name": "each_question_contains_required_review_fields",
-      "description": "每道题都必须包含面试官考点、面试官/公司视角、回答评分、项目经验方向、技术扩展方向。",
+      "description": "技术问题保留逐题评价和适用分析方向，HR题不硬凑技术内容。",
       "prompt": "我选择仅 Markdown。请把 @go-mock-interview.md 做成复盘，每一题都要能看出为什么扣分，以及后面怎么补。",
       "expected_behavior": {
         "should_trigger": true,
         "per_question_required_fields": [
           "面试官考点",
           "面试官/公司视角",
-          "回答评分",
-          "项目经验方向",
-          "技术扩展方向"
+          "评价",
+          "适用的回答方向"
         ],
         "scoring_values": [
           "通过",
@@ -188,7 +191,7 @@
     {
       "name": "do_not_generate_reusable_answer_material_section",
       "description": "复盘不能生成“可复用回答素材”章节。",
-      "prompt": "请复盘 @hr-tech-interview.md，把所有问题按答得好和答得差分组，给评分、短板卡片和复习计划。",
+      "prompt": "请复盘 @hr-tech-interview.md，给评分、短板卡片和复习计划。",
       "expected_behavior": {
         "should_trigger": true,
         "must_include": [
@@ -215,14 +218,6 @@
       "prompt": "请基于 @fde-interview.md 生成 Markdown 复盘。我希望结构适合后续复习和背诵，不要分散成很多小章节。",
       "expected_behavior": {
         "should_trigger": true,
-        "required_sections": [
-          "## 重点",
-          "## 一、面试概览",
-          "## 二、逐题复盘",
-          "## 三、短板卡片",
-          "## 四、下次面试优先背诵版",
-          "## 五、建议复习顺序"
-        ],
         "must_include": [
           "逐题复盘中每题包含评价、现场表现、简单精炼版和下次可这样答或详细面试版答案",
           "下次面试优先背诵版沉淀最高优先级的可口述答案",
@@ -231,7 +226,16 @@
         "must_not_do": [
           "生成独立的答得还可以的问题章节",
           "生成独立的答得不好的问题章节",
-          "用下一步复习计划替代建议复习顺序"
+          "用下一步复习计划替代建议复习顺序",
+          "没有实际内容时生成空章节或占位符"
+        ],
+        "suggested_sections": [
+          "## 重点",
+          "## 一、面试概览",
+          "## 二、逐题复盘",
+          "## 三、短板卡片",
+          "## 四、下次面试优先背诵版",
+          "## 五、建议复习顺序"
         ]
       }
     },
@@ -260,6 +264,108 @@
           "遗漏面试时间或批次",
           "让 Markdown 和 HTML 模板使用不同字段顺序",
           "把评价放在面试官考点之后"
+        ]
+      }
+    },
+    {
+      "name": "format_existing_review_without_reanalysis",
+      "prompt": "仅格式化已有面试复盘，已有评价是勉强通过。不要重新分析，没有原始转写稿。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "保留勉强通过及已有结论",
+          "仅按结构、分段与标识整理"
+        ],
+        "must_not_do": [
+          "重新评分",
+          "索要原稿作为排版前提"
+        ]
+      }
+    },
+    {
+      "name": "product_without_technical_design",
+      "prompt": "写PRD：用户可以创建提醒、设置时间、取消提醒。技术方案还未设计。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "目标、使用方式与已知功能规则"
+        ],
+        "must_not_do": [
+          "编造数据库表或接口",
+          "要求先设计技术方案",
+          "填入未知商业价格"
+        ]
+      }
+    },
+    {
+      "name": "blog_not_product_specification",
+      "prompt": "整理博客：我第一次使用Git时把暂存理解错了，后来用一次实验弄明白了。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "保留个人经历与观点的叙述"
+        ],
+        "must_not_do": [
+          "强加验收标准或产品规格章节"
+        ]
+      }
+    },
+    {
+      "name": "course_material_handoff",
+      "prompt": "这份课程内容已经由transcript-refine精炼完，只需编排成阅读学习稿；保留案例、原稿行范围和参考清单。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "课程材料细则",
+          "单个主标题与紧随其后的重点",
+          "来源使用清单和真实定位"
+        ],
+        "must_not_do": [
+          "再次删除知识",
+          "要求纯文本首标题"
+        ]
+      }
+    },
+    {
+      "name": "cleanup_only_routes_out",
+      "prompt": "只清理这份面试转写稿的标点和错字，不要复盘。",
+      "expected_behavior": {
+        "should_trigger": false,
+        "preferred_skill": "transcript-refine",
+        "must_not_do": [
+          "评分",
+          "生成复盘"
+        ]
+      }
+    },
+    {
+      "name": "html_only_and_escape",
+      "prompt": "仅生成HTML面试复盘，候选人的原话包含 <script>alert(1)</script>，请作为原文引用。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "仅生成HTML文件",
+          "原文按文字转义而非执行",
+          "语义标题、列表与窄屏换行"
+        ],
+        "must_not_do": [
+          "额外生成Markdown文件",
+          "将用户原话当可执行脚本"
+        ]
+      }
+    },
+    {
+      "name": "hr_question_without_forced_technology",
+      "prompt": "复盘HR题：为什么换工作？回答：想承担更完整的职责。仅有这段文字，无JD。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "据有限证据分析表达与职业判断",
+          "具体分析范围"
+        ],
+        "must_not_do": [
+          "编造技术方案或项目经历",
+          "强行补技术扩展规格"
         ]
       }
     }

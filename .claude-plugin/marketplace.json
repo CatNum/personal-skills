@@ -10,21 +10,21 @@
   "plugins": [
     {
       "name": "interview-skills",
-      "description": "Mock interview and interview transcript review skills",
+      "description": "Live mock interviews; transcript cleanup and retrospectives are provided by content-skills",
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/interview-mock",
-        "./skills/interview-transcript-review"
+        "./skills/interview-mock"
       ]
     },
     {
       "name": "content-skills",
-      "description": "Markdown formatting and course transcript refinement skills",
+      "description": "Documentation writing, interview retrospectives, transcript cleanup, course refinement, and documentation paths",
       "source": "./",
       "strict": false,
       "skills": [
-        "./skills/md-formatting",
+        "./skills/project-structure",
+        "./skills/document-writing",
         "./skills/transcript-refine"
       ]
     }

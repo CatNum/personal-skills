@@ -1,37 +1,7 @@
----
-name: md-formatting
-description: Use when creating or updating Markdown (.md) files that need consistent structure, including blogs, product roadmaps, product documents, design documents, personal study notes, and glossaries.
----
+# Markdown 编写规则
 
-# md-formatting
-
-## 目标
-
-统一 Markdown 的标题、重点和正文层级，同时让文档内容服从其写作目的。
-以下通用规则始终适用；不同类型的内容与章节细则按需读取
-`references/`，不要一次加载全部。
-
-## 判断类型并读取细则
-
-先看用户明确指定的类型，再看文档实际回答的问题，
-最后参考文件名或目录名。只读取命中的类型文件：
-
-| 文档目的 | 读取 |
-| --- | --- |
-| 博客：观点或经历 | [`blog.md`](references/blog.md) |
-| ROADMAP：版本总览 | [`roadmap.md`](references/roadmap.md) |
-| 产品文档：功能与规则 | [`product.md`](references/product.md) |
-| 设计文档：内部方案与逻辑 | [`design.md`](references/design.md) |
-| 个人学习笔记 | [`notes.md`](references/notes.md) |
-| 术语表 | [`glossary.md`](references/glossary.md) |
-
-若一份文档确实兼有多个目的，只读取相关细则，
-以主要读者和主要问题确定主类型；
-内容可独立维护时，建议拆分并互相链接。
-产品文档、设计文档或 ROADMAP 涉及共用术语时，
-额外读取 `references/glossary.md`。
-类型仍无法可靠判断时，先只用通用规则保留原结构；
-类型会改变实质内容取舍时向用户确认。
+所有 Markdown 成文任务读取本文件，并结合对应文档类型细则执行。
+面试清理稿是证据整理，由 `transcript-refine` 处理。
 
 ## 通用格式
 
@@ -152,20 +122,8 @@ description: Use when creating or updating Markdown (.md) files that need consis
   必要信息缺失且影响任务完成时向用户确认；
   可继续处理的部分先完成，在交付说明中指出缺口。
 
-## 输出与自检
+## 格式自检
 
-- 在对话中直接输出格式化后的 Markdown 文档、
-  且用户未要求说明时，只输出文档。
-  修改文件、讨论写法或修改本 skill 时，按请求说明
-  改动与未决事项；若用户同时明确要求贴出全文
-  或只输出文档，以该要求为准。
-- 输出前检查：类型细则是否按需读取；
-  标题与重点是否唯一且顺序正确；重点是否有来源依据；
-  编号是否连续；正文与列表是否存在需要水平滚动的
-  超长物理行；是否保留旧文语义；
-  是否产生空章节或虚构内容；
-  段落是否各有主题；并列要点与顺序步骤是否使用合适的列表；
-  分段空行和列表缩进是否正确；
-  加粗是否聚焦关键短语；行内代码是否用于精确技术文本；
-  引用、链接与删除线是否表达对应含义；
-  代码块、表格和 Mermaid 是否可读。
+检查标题与重点的唯一性和顺序、编号连续性、正文与列表源码行宽、
+段落主题和空行、列表缩进、语义标识、代码块、表格和 Mermaid。
+内容与输出契约遵循主 `SKILL.md` 及命中的文档类型细则。

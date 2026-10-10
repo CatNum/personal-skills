@@ -230,11 +230,11 @@
     },
     {
       "name": "do_not_trigger_for_transcript_review",
-      "description": "用户要求复盘已有面试转写稿时，不应触发 interview-mock，应交给 interview-transcript-review。",
+      "description": "用户要求复盘已有面试转写稿时，不应触发 interview-mock，应交给 document-writing。",
       "prompt": "这是我昨天模拟面试的视频转写稿，请帮我逐题复盘，看看哪些题答得不好。",
       "expected_behavior": {
         "should_trigger": false,
-        "preferred_skill": "interview-transcript-review",
+        "preferred_skill": "document-writing",
         "must_include": [
           "识别为已有面试转写稿复盘",
           "不进入现场模拟面试一问一答流程"
