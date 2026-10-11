@@ -368,6 +368,70 @@
           "强行补技术扩展规格"
         ]
       }
+    },
+    {
+      "name": "markdown_bold_punctuation_boundaries",
+      "description": "修正标点导致的加粗失效，保留文字和标点，并按实际渲染验证。",
+      "prompt": "只修复这几句的 Markdown 强调：**重点：**正文；这段**“重点”**内容；**（重点）**需要注意。保留标点和原意。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "将外围标点移到加粗范围外，保留关键词加粗",
+          "用预览或兼容解析器确认生成强调节点"
+        ],
+        "must_not_do": [
+          "在星号内侧添加空格",
+          "统一替换为双下划线",
+          "删除原有标点",
+          "插入不可见字符或默认使用HTML标签"
+        ],
+        "render_cases": [
+          {
+            "source": "**重点**：正文",
+            "expected_html": "<strong>重点</strong>：正文"
+          },
+          {
+            "source": "这段“**重点**”内容",
+            "expected_html": "这段“<strong>重点</strong>”内容"
+          },
+          {
+            "source": "（**重点**）需要注意",
+            "expected_html": "（<strong>重点</strong>）需要注意"
+          }
+        ]
+      }
+    },
+    {
+      "name": "preserve_valid_emphasis_and_technical_punctuation",
+      "description": "保留合法加粗中的内部标点及技术名称，不机械删除标点或扩大强调。",
+      "prompt": "检查 Markdown 加粗：普通**读取、写入**操作。下一行是 **重点：**。说明使用 C++ 实现，其中 C++ 按精确技术文本标识。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "保留短语内部的顿号",
+          "按标记内外的完整上下文判断，不把所有标点视为错误",
+          "C++保持完整并使用行内代码"
+        ],
+        "must_not_do": [
+          "删除技术名称中的加号",
+          "把所有加粗统一加空格",
+          "把整段正文改为代码"
+        ],
+        "render_cases": [
+          {
+            "source": "普通**读取、写入**操作",
+            "expected_html": "普通<strong>读取、写入</strong>操作"
+          },
+          {
+            "source": "**重点：**",
+            "expected_html": "<strong>重点：</strong>"
+          },
+          {
+            "source": "使用 `C++` 实现",
+            "expected_html": "使用 <code>C++</code> 实现"
+          }
+        ]
+      }
     }
   ]
 }
