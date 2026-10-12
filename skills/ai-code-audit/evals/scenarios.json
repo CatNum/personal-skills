@@ -1,0 +1,105 @@
+{
+  "name": "ai-code-audit generic evaluation criteria",
+  "execution": "通用提示与评分条件，用于在独立上下文和隔离数据中评估技能；不包含历史故障、具体实现或已执行结果。",
+  "evals": [
+    {
+      "name": "performance_dependencies",
+      "prompt": "检查 AI 代码的调用依赖和关键路径。区分必要等待、独立工作、重复工作与可选依赖。",
+      "should_trigger": true,
+      "expected_behavior": [
+        "按因果与版本约束判断并行条件",
+        "测量调用关系、工作量与关键结果可用性",
+        "在保持正确性前提下缩小等待与同步范围"
+      ]
+    },
+    {
+      "name": "state_concurrency",
+      "prompt": "检查多个异步操作共享状态时的结果归属、执行顺序和清理策略。",
+      "should_trigger": true,
+      "expected_behavior": [
+        "识别所有写入入口及失效条件",
+        "验证乱序、重入、取消和上下文变化",
+        "不把取消等待等同于撤销副作用"
+      ]
+    },
+    {
+      "name": "identity_states",
+      "prompt": "检查身份读取的有效、明确未认证和读取失败三个结果分支，以及各分支的数据访问策略。",
+      "should_trigger": true,
+      "expected_behavior": [
+        "区分三类身份结果",
+        "不从缓存推断授权",
+        "按可信上下文处理私有数据和旧结果"
+      ]
+    },
+    {
+      "name": "cache_boundaries",
+      "prompt": "检查缓存的归属、结构、有效性及存储失败策略。",
+      "should_trigger": true,
+      "expected_behavior": [
+        "检查上下文隔离与失效传播",
+        "区分展示加速与必需协议状态",
+        "验证损坏、过期及不可用状态，不污染确认结果"
+      ]
+    },
+    {
+      "name": "consistency_constraints",
+      "prompt": "检查关联数据读取与局部更新是否保持业务不变量。",
+      "should_trigger": true,
+      "expected_behavior": [
+        "识别事务、快照和版本协议",
+        "并行和局部更新有明确适用条件",
+        "交错读写验证集合、版本或其他关联约束"
+      ]
+    },
+    {
+      "name": "commit_semantics",
+      "prompt": "检查异步写入的提交确认与后续同步是否表达了不同结果。",
+      "should_trigger": true,
+      "expected_behavior": [
+        "区分已提交、明确未提交与未知结果",
+        "同步失败不改变提交事实",
+        "未知非幂等操作不盲目重发"
+      ]
+    },
+    {
+      "name": "lifecycle_idempotency",
+      "prompt": "检查防重复副作用的约束能否覆盖上下文变化、重新进入和实例重建。",
+      "should_trigger": true,
+      "expected_behavior": [
+        "按实际可重触发生命周期验证",
+        "区分客户端台账与服务端幂等保证",
+        "能力不足时报告未解决边界，不以既有测试通过推断全覆盖"
+      ]
+    },
+    {
+      "name": "business_runtime_contracts",
+      "prompt": "检查 AI 代码的业务成功定义、输入权限、资源生命周期及运行环境假设。",
+      "should_trigger": true,
+      "expected_behavior": [
+        "按证据选择相关边界检查",
+        "以可信来源和真实契约为依据",
+        "验证异常与越界，不编造事实或接口能力"
+      ]
+    },
+    {
+      "name": "review_only",
+      "prompt": "只审查 AI 生成代码的隐患，给出分类与证据，不要修改文件。",
+      "should_trigger": true,
+      "expected_behavior": [
+        "仅审查，不修改文件",
+        "区分已确认与待验证",
+        "给出类别、约束、影响及验证建议"
+      ]
+    },
+    {
+      "name": "visual_only",
+      "prompt": "仅调整界面的视觉样式，没有请求审计或行为修改。",
+      "should_trigger": false,
+      "expected_behavior": [
+        "完成授权的视觉调整",
+        "不扩张为整库审计"
+      ]
+    }
+  ]
+}

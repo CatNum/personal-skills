@@ -74,6 +74,12 @@ Usage notes:
 <location>global</location>
 </skill>
 
+<skill>
+<name>ai-code-audit</name>
+<description>Use when reviewing or fixing hidden problems in AI-generated code, involving performance, state and concurrency, consistency, identity/cache boundaries, observability, and business/runtime contracts.</description>
+<location>project</location>
+</skill>
+
 </available_skills>
 <!-- SKILLS_TABLE_END -->
 

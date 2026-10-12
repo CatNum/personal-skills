@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "CatNum personal Agent Skills",
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
   "plugins": [
     {
@@ -26,6 +26,15 @@
         "./skills/project-structure",
         "./skills/document-writing",
         "./skills/transcript-refine"
+      ]
+    },
+    {
+      "name": "engineering-skills",
+      "description": "General hidden-defect categories for AI-generated code: performance, concurrency, consistency, identity/cache, observability, and business/runtime contracts",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/ai-code-audit"
       ]
     }
   ]

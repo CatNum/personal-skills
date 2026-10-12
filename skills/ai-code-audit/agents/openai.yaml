@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI 代码隐患检查与修复"
+  short_description: "按通用分类检查 AI 代码的性能、并发、一致性与业务边界隐患并验证修复"
+  default_prompt: "使用 $ai-code-audit 按通用问题分类检查这个项目的 AI 生成代码，定位原因后修复并验证。"
