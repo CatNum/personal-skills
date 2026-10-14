@@ -116,6 +116,24 @@
           "把PDF标成文本行号"
         ]
       }
+    },
+    {
+      "name": "accepted_corrections_replace_pending_markers",
+      "description": "接受用户术语纠错后直接更新清理稿，保留真实错误判断与犹豫。",
+      "prompt": "原稿：“我用科特尔。呃，瑞迪斯是单线程，所以没有并发问题了吧，我不太确定。有人做earth check。”用户补充：科特尔是Cursor，earth check就是check。只更新清理稿。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "使用Cursor、Redis、check",
+          "保留没有并发问题的真实错误判断和不确定表达",
+          "移除已经解决的待核对标记"
+        ],
+        "must_not_do": [
+          "追加由用户确认、术语核对清单或纠错经过",
+          "将错误回答润色成正确答案",
+          "额外生成面试复盘"
+        ]
+      }
     }
   ]
 }

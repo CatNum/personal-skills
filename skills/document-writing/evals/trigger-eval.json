@@ -432,6 +432,94 @@
           }
         ]
       }
+    },
+    {
+      "name": "known_metadata_is_written_directly",
+      "description": "明确的面试元信息直接入文，来源核对不成为正文批注。",
+      "prompt": "请写面试概览。日期是2026-10-13，时长34分钟。面试官说“我是团队负责人，我们负责留学租房C端产品”。正式JD未提供。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "直接填写日期、时长、团队负责人身份和业务",
+          "仅说明JD缺失对岗位判断的影响"
+        ],
+        "must_not_do": [
+          "添加由本人确认、用户补充、面试官自述等例行来源批注",
+          "添加本次核对记录或整理范围表项",
+          "编造岗位职级或前端职责比例"
+        ]
+      }
+    },
+    {
+      "name": "resolved_corrections_update_content_without_process_log",
+      "description": "术语与发言归属澄清后更新内容和分析，清除旧疑点。",
+      "prompt": "更新复盘。原文工具名待核对，“没有下一环”说话人不明。现在工具名是db-migrate；“有AI没有下一环”是面试官说的，我在问是否整体负责。没有新增项目交付证据。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "直接使用db-migrate",
+          "将没有下一环归给面试官，修正错误归因",
+          "删除已解决的工具名和说话人疑点",
+          "保留没有举出完整交付案例的有据判断"
+        ],
+        "must_not_do": [
+          "写用户确认了哪些东西的过程记录",
+          "仅因识别词纠正就提高评分",
+          "将面试官观点归为候选人主张"
+        ]
+      }
+    },
+    {
+      "name": "opinion_and_question_attribution_is_preserved",
+      "description": "减少例行来源说明时，仍保留观点归属和问句边界。",
+      "prompt": "记录这段面试交流：面试官说“我们所有代码用AI写，我认为以后工程师不用审代码”。我问“产品是不是写完直接提交就上线？”对方只说“有专业人员检查”。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "把无需审代码保留为面试官的观点",
+          "把直接提交上线保留为候选人的问题",
+          "指出具体检查与发布机制尚未说明"
+        ],
+        "must_not_do": [
+          "将无需审代码写成客观技术结论",
+          "将候选人的疑问写成公司既定流程"
+        ]
+      }
+    },
+    {
+      "name": "inference_and_missing_information_remain_explicit",
+      "description": "事实直接写并不意味着消除未知或把推断写成事实。",
+      "prompt": "根据辰星_一面.txt写概览。没有日期和JD。面试官连续问页面、接口和发布，但未明确岗位名称。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "公司为辰星，轮次为一面",
+          "日期和正式岗位缺失",
+          "交付范围的推断注明提问依据和结论范围"
+        ],
+        "must_not_do": [
+          "将全栈工程师写成确定岗位名称",
+          "为普通公司和轮次信息逐条添加按文件名记录等批注",
+          "删除所有分析限制或编造缺失日期"
+        ]
+      }
+    },
+    {
+      "name": "explicit_audit_request_keeps_provenance",
+      "description": "用户要求溯源或信息存在冲突时，保留必要来源和确认状态。",
+      "prompt": "为审计写一份证据账本。材料A记录面试30分钟，材料B记录34分钟，两者尚未统一。用户要求逐项列明来源、差异和待核对状态。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "分别保留30分钟和34分钟的材料来源",
+          "明确差异与尚未统一的状态",
+          "按请求提供证据账本"
+        ],
+        "must_not_do": [
+          "套用正文简洁规则而抹掉来源",
+          "自行选定一个时长当作确定事实"
+        ]
+      }
     }
   ]
 }
