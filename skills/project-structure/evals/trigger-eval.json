@@ -1,0 +1,138 @@
+{
+  "name": "project-structure naming scenarios",
+  "description": "Prompt-only scenarios; expected behaviors require task execution or review, not text matching alone.",
+  "evals": [
+    {
+      "name": "mixed_files_and_folders",
+      "prompt": "目录为空，新建主题为产品文档的文件夹、主题为阅读说明的Markdown文件、主题为设计文档的文件夹，按给定顺序。未指定精确输出名称。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "00. 产品文档/",
+          "01. 阅读说明.md",
+          "02. 设计文档/"
+        ],
+        "must_not_do": [
+          "文件夹和文件各自从00编号导致重复编号"
+        ]
+      }
+    },
+    {
+      "name": "append_without_gap_reuse",
+      "prompt": "已有00. 概览.md、02. 资料/，新建主题为笔记的Markdown文档，未指定精确输出文件名。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "03. 笔记.md",
+          "原有路径不变"
+        ],
+        "must_not_do": [
+          "填补01编号",
+          "重排02. 资料/"
+        ]
+      }
+    },
+    {
+      "name": "check_only",
+      "prompt": "只检查：00.概览.md、01、笔记.md、02.  资料/。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "报告句点或空格格式错误",
+          "保留现有路径，等待修复请求"
+        ],
+        "must_not_do": [
+          "直接批量重命名"
+        ]
+      }
+    },
+    {
+      "name": "fixed_names",
+      "prompt": "整理目录：SKILL.md、README.md、package.json、.git/、普通笔记.md。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "保留工具约定的四个固定名称",
+          "普通笔记按范围分配编号"
+        ],
+        "must_not_do": [
+          "给全部文件机械加编号"
+        ]
+      }
+    },
+    {
+      "name": "derived_dual_format",
+      "prompt": "只有00. 面试.md，新建该面试的清理稿，再生成同一复盘的Markdown和HTML，按这个顺序。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "01. 面试-清理.md",
+          "02. 面试-复盘.md",
+          "02. 面试-复盘.html"
+        ],
+        "must_not_do": [
+          "重复添加00.前缀",
+          "复盘使用不同编号"
+        ]
+      }
+    },
+    {
+      "name": "paired_doc_next_slot",
+      "prompt": "docs/01. PRD已有00. 登录.md，docs/02. ARCHITECTURE已有00. 登录的技术方案.md和02. 支付的技术方案.md。新建通知功能PRD和方案。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "03. 通知.md",
+          "03. 通知的技术方案.md",
+          "不改变已有编号"
+        ],
+        "must_not_do": [
+          "只看PRD目录选择01却破坏跨目录配对顺序"
+        ]
+      }
+    },
+    {
+      "name": "existing_file_update",
+      "prompt": "只改现有未编号的notes.md中的一段文字。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "沿用notes.md路径",
+          "仅更新正文"
+        ],
+        "must_not_do": [
+          "触发批量编号"
+        ]
+      }
+    },
+    {
+      "name": "capacity_boundary",
+      "prompt": "已有00到99的两位编号文件，需要再新增一项，用户未授权重编号。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "说明字典序稳定性需统一位宽和更新引用",
+          "确认扩容方案前保留原路径"
+        ],
+        "must_not_do": [
+          "直接声称100.可保持现有字典序",
+          "未获授权批量改名"
+        ]
+      }
+    },
+    {
+      "name": "explicit_name_has_priority",
+      "prompt": "目录已有00. 概览.md和02. 资料/，新文档必须保存为学习笔记.md，保留这个精确文件名。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "使用学习笔记.md，不添加编号",
+          "保留已有路径"
+        ],
+        "must_not_do": [
+          "将明确指定的文件改名为03. 学习笔记.md"
+        ]
+      }
+    }
+  ]
+}

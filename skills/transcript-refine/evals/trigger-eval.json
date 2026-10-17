@@ -34,7 +34,7 @@
       "expected_behavior": {
         "should_trigger": true,
         "must_include": [
-          "另存 interview-清理.md",
+          "读取project-structure后分配目标目录编号，名称主体为interview-清理.md",
           "保留错误判断、口头禅及不确定性",
           "保留问答顺序"
         ],
@@ -90,11 +90,11 @@
     },
     {
       "name": "existing_target_preserves_source",
-      "prompt": "只清理 interview.md，目录里已经有 interview-清理.md，未要求覆盖。",
+      "prompt": "只清理 00. interview.md，目录里已经有 01. interview-清理.md，未要求覆盖，除此之外没有文件或目录。",
       "expected_behavior": {
         "should_trigger": true,
         "must_include": [
-          "选用不冲突的新清理稿文件名"
+          "使用 02. interview-清理.md，不覆盖原稿或已有清理稿"
         ],
         "must_not_do": [
           "覆盖原稿或已有清理稿"
@@ -132,6 +132,20 @@
           "追加由用户确认、术语核对清单或纠错经过",
           "将错误回答润色成正确答案",
           "额外生成面试复盘"
+        ]
+      }
+    },
+    {
+      "name": "explicit_output_path_kept",
+      "prompt": "清理 00. interview.md，明确写入 cleaned.md，不要复盘。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "遵循用户指定的cleaned.md路径",
+          "保留原稿"
+        ],
+        "must_not_do": [
+          "自行给用户指定文件名加编号"
         ]
       }
     }

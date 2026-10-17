@@ -37,7 +37,7 @@
       "expected_behavior": {
         "should_trigger": true,
         "must_include": [
-          "默认生成 interview-复盘.md",
+          "读取project-structure后分配目标目录编号，名称主体为interview-复盘.md",
           "缺少简历JD时继续并说明分析范围"
         ],
         "must_not_do": [
@@ -91,20 +91,22 @@
     {
       "name": "review_output_must_be_new_file_with_expected_name",
       "description": "复盘文件必须新建，并按原文件名派生命名。",
-      "prompt": "请基于 @backend-interview.md 生成复盘，我选择 Markdown + HTML。",
+      "prompt": "请基于 @00. backend-interview.md 生成复盘，我选择 Markdown + HTML。目标目录只有该原稿，输出文件名未指定。",
       "expected_behavior": {
         "should_trigger": true,
         "must_create_files": [
-          "backend-interview-复盘.md",
-          "backend-interview-复盘.html"
+          "01. backend-interview-复盘.md",
+          "01. backend-interview-复盘.html"
         ],
         "must_include": [
           "复盘文件新建，不能覆盖原稿",
-          "Markdown 与 HTML 内容结构一致，HTML 只增强视觉层级"
+          "Markdown 与 HTML 内容结构一致，HTML 只增强视觉层级",
+          "读取project-structure，双格式共用编号，原稿不重命名"
         ],
         "must_not_do": [
-          "覆盖 backend-interview.md",
-          "把复盘内容直接写回原稿"
+          "覆盖或重命名 00. backend-interview.md",
+          "把复盘内容直接写回原稿",
+          "重复叠加原稿的排序前缀"
         ]
       }
     },

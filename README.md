@@ -19,7 +19,7 @@ Anthropic 官方 skill 不再复制到本仓库，也不在本仓库中二次修
 |---|---|
 | `interview-mock` | 分级模拟面试；按 Go、MySQL、Redis、系统设计、Agent、项目经历或 JD 等方向进行一问一答，并沉淀复习材料。 |
 | `document-writing` | 按文档目的编写和整理内容；面试复盘包含评分、考点、回答改进和短板卡片。所有类型支持 Markdown，面试复盘另支持 HTML。 |
-| `project-structure` | 项目文档目录管理；统一 `docs/` 下 ROADMAP、PRD 和技术方案的路径与命名，并保持 PRD 与技术方案一一对应。 |
+| `project-structure` | 文件与目录管理；在指定范围统一使用编号、句点和空格排序，保留固定名称，并维护 `docs/` 布局与 PRD、技术方案的一一配对。 |
 | `ai-code-audit` | AI 代码隐患检查与修复；按通用分类检查性能、并发、一致性、身份、反馈及业务边界隐患，并完成最小修复和验证。 |
 | `transcript-refine` | 转写稿清理与精炼；面试稿保留现场回答，课程稿保留完整教学知识，支持阅读稿与口播稿。 |
 
@@ -61,6 +61,11 @@ personal-skills/
   原 `interview-transcript-review` 的清理能力迁入 `transcript-refine`，
   分析与成文能力迁入 `document-writing`。
   已安装旧版本的环境需要重新同步技能列表，移除旧入口后使用新名称。
+
+新建普通文件与文件夹的命名由 `project-structure` 统一维护，
+格式为 `00. 名称`、`01. 名称`，句点后有一个半角空格。
+文档编写、转写处理和面试学习资料创建时引用该规则；
+用户指定的完整路径与工具要求的固定名称优先，更新旧文件时保留原路径。
 
 ### 5.1 面试材料处理
 

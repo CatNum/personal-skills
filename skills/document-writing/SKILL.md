@@ -30,6 +30,11 @@ description: Use when writing or updating blogs, roadmaps, product requirements,
 其他类型需要 HTML 或其他格式时，说明当前技能范围并确认交付方式，
 不自行套用面试 HTML 模板。
 
+写入新文件或创建目录前，读取 `project-structure` 的统一命名规则，
+按目标目录分配排序编号；本 skill 只确定主题与用途后缀。
+用户明确指定完整路径时遵循其请求，更新已有文档时保留原路径。
+涉及项目文档布局时再加载该 skill 的项目文档细则。
+
 ## 二、判断文档目的
 
 优先依据用户明确指定的类型，其次依据文档实际目的，

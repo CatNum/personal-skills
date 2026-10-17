@@ -52,7 +52,7 @@ Usage notes:
 
 <skill>
 <name>project-structure</name>
-<description>Use when creating, checking, renaming, or reorganizing project documentation paths under docs, including paired PRD and technical solution files.</description>
+<description>Use when creating, checking, naming, renaming, or reorganizing files and folders with stable numbered names, including paired PRD and technical solution files under docs.</description>
 <location>global</location>
 </skill>
 
