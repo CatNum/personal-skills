@@ -1,6 +1,6 @@
 ---
 name: transcript-refine
-description: Use when cleaning interview transcripts into a question-by-question record that preserves the actual dialogue, answer details, readable JD structure, and a source-note-free final document, or refining video and livestream course transcripts into first-study reading materials or spoken scripts. For interview analysis and retrospective documents, use document-writing.
+description: Use when cleaning interview transcripts into a question-by-question record that preserves the actual dialogue, answer details, readable JD structure, and a self-contained final document, or refining video and livestream course transcripts into first-study reading materials or spoken scripts. For interview analysis and retrospective documents, use document-writing.
 ---
 
 # 转写稿清理与精炼
@@ -10,7 +10,10 @@ description: Use when cleaning interview transcripts into a question-by-question
 - **先判断用途**：面试清理保留现场证据；课程精炼保留完整教学内容。
 - **逐问保留**：面试清理按原始顺序逐问逐答，不按主题合并问题，不把回答压成摘要。
 - **JD 可读**：岗位 JD 使用 Markdown 标题、段落和列表分区，不整段缩进或塞入代码块。
-- **单稿交付**：面试清理稿正文不写来源路径、“原稿行”、时间戳范围或原稿副本说明；用户要求只保留清理稿时，删除被替代的 TXT。
+- **清理稿独立保存**：清理后的 Markdown 是后续正式记录，应完整承载问答、
+  必要上下文和 JD，即使 TXT 不再保留也能独立阅读和复盘。
+- **正文无来源锚点**：不写“原稿行”、来源路径、原始行范围、时间戳范围，
+  不写“详见原稿”等依赖原始转写文件的说明。
 - **按需加载**：只读取命中的场景细则，清理与复盘分别执行。
 
 ## 一、判断场景
@@ -32,7 +35,8 @@ description: Use when cleaning interview transcripts into a question-by-question
 
 ## 二、共同清理规则
 
-- 按原始顺序整理自然段、标点、断句和换行；保留说话人及已有时间戳。
+- 按原始顺序整理自然段、标点、断句和换行；保留说话人。
+  已有时间戳是否进入交付正文，按面试或课程场景细则决定。
 - 根据上下文修正明确的识别错字、拼写、缩写、技术术语和专有名词，
   同一概念统一写法。不能确定的词保留或标记待核对。
   用户澄清术语、事实或说话人后，直接更新对应文字与标签，移除已解决的标记；
@@ -59,8 +63,11 @@ description: Use when cleaning interview transcripts into a question-by-question
   目标文件已存在且用户未要求覆盖时，先确认目标，不静默覆盖。
 - 清理稿正文不展示来源路径、“原稿行”、原始行范围、时间戳范围或
   “原稿见……”说明；定位信息仅供执行时内部核对。
-- 用户明确要求只保留清理结果时，删除已被替代的 TXT 转写稿；
-  其他输入材料的保留与删除严格按用户指定范围处理。
+- 正式清理稿必须内容完整、结构自洽，不依赖已删除或即将删除的 TXT；
+  去除来源标注时不得删减实际问答、回答细节和真实的不确定表达。
+- 完成内容和结构核对后，只有用户明确要求只保留清理稿时，
+  才删除已被替代的 TXT 转写稿；未获明确授权时不自动删除输入文件。
+  删除范围只限用户明确指定的输入文件；其他材料不得擅自处理。
 - **面试清理稿属于证据整理**：不加入重点、评分或复盘结论；
   可以加入标题、岗位 JD 和逐问逐答结构，标题必须来自原始问句，
   不能用抽象主题替代多个真实问题。
@@ -78,5 +85,7 @@ description: Use when cleaning interview transcripts into a question-by-question
 - 识别纠错是否有依据，原意、顺序和已有说话人是否保留？
 - 面试证据是否保真，课程知识是否完整，是否发生跨场景删改？
 - 是否按请求交付正式清理稿，正文不含来源路径、原稿行范围或副本说明？
+- 清理稿是否不依赖 TXT 即可独立阅读，且未因去除来源标注丢失问答细节？
+- 是否在核对完成并取得删除授权后，才删除指定 TXT？
 - 面试稿是否逐问保留、没有合并问题或抽象化回答，JD 是否具有正常 Markdown 层级？
 - 是否仅在用户要求复盘时进入复盘，未向清理稿加入分析结论？
