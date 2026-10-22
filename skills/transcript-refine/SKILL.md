@@ -1,6 +1,6 @@
 ---
 name: transcript-refine
-description: Use when cleaning interview transcripts into a question-by-question record that preserves the actual dialogue, answer details, and readable JD structure, or refining video and livestream course transcripts into first-study reading materials or spoken scripts. For interview analysis and retrospective documents, use document-writing.
+description: Use when cleaning interview transcripts into a question-by-question record that preserves the actual dialogue, answer details, readable JD structure, and a source-note-free final document, or refining video and livestream course transcripts into first-study reading materials or spoken scripts. For interview analysis and retrospective documents, use document-writing.
 ---
 
 # 转写稿清理与精炼
@@ -10,7 +10,7 @@ description: Use when cleaning interview transcripts into a question-by-question
 - **先判断用途**：面试清理保留现场证据；课程精炼保留完整教学内容。
 - **逐问保留**：面试清理按原始顺序逐问逐答，不按主题合并问题，不把回答压成摘要。
 - **JD 可读**：岗位 JD 使用 Markdown 标题、段落和列表分区，不整段缩进或塞入代码块。
-- **保护原稿**：默认另存处理结果，保留原稿与可追溯位置。
+- **单稿交付**：面试清理稿正文不写来源路径、“原稿行”、时间戳范围或原稿副本说明；用户要求只保留清理稿时，删除被替代的 TXT。
 - **按需加载**：只读取命中的场景细则，清理与复盘分别执行。
 
 ## 一、判断场景
@@ -55,10 +55,12 @@ description: Use when cleaning interview transcripts into a question-by-question
   `<原名>-阅读稿.md`、`<原名>-口播稿.md`。
   `<原名>` 去掉原扩展名与已有排序前缀；不复制来源编号作为输出编号。
   用户明确指定路径、文件名或要求在原文件清理时，遵循其请求。
-- 默认保留原稿；目标文件已存在时，使用不冲突的新文件名，
-  除非用户明确要求更新该文件。
-- 用原稿时间戳、原始行范围或已有段落编号保留定位依据。
-  位置无法可靠获取时说明限制，不把清理后的行号冒充原稿行号。
+- 更新已有清理稿时沿用正式文件名，不创建带数字后缀的重复稿。
+  目标文件已存在且用户未要求覆盖时，先确认目标，不静默覆盖。
+- 清理稿正文不展示来源路径、“原稿行”、原始行范围、时间戳范围或
+  “原稿见……”说明；定位信息仅供执行时内部核对。
+- 用户明确要求只保留清理结果时，删除已被替代的 TXT 转写稿；
+  其他输入材料的保留与删除严格按用户指定范围处理。
 - **面试清理稿属于证据整理**：不加入重点、评分或复盘结论；
   可以加入标题、岗位 JD 和逐问逐答结构，标题必须来自原始问句，
   不能用抽象主题替代多个真实问题。
@@ -66,8 +68,8 @@ description: Use when cleaning interview transcripts into a question-by-question
   再读取 `document-writing` 的通用规则与课程学习材料细则组织 Markdown。
   两个 skill 同在 `content-skills` 中；若目标环境缺少后者，
   交付已完成的精炼内容并说明未执行统一排版的限制。
-- 面试清理后需要复盘时，向 `document-writing` 交接原稿路径、
-  清理稿路径、定位依据、仍不确定的片段及用户已提供的上下文和输出格式。
+- 面试清理后需要复盘时，向 `document-writing` 交接输入材料、
+  清理稿路径、仍不确定的片段及用户已提供的上下文和输出格式。
   用户只要清理时，不索要简历或 JD。
 
 ## 四、自检
@@ -75,6 +77,6 @@ description: Use when cleaning interview transcripts into a question-by-question
 - 场景是否依据用户目的判断，且只加载了相关细则？
 - 识别纠错是否有依据，原意、顺序和已有说话人是否保留？
 - 面试证据是否保真，课程知识是否完整，是否发生跨场景删改？
-- 是否按请求交付并保护原稿，定位是否真实？
+- 是否按请求交付正式清理稿，正文不含来源路径、原稿行范围或副本说明？
 - 面试稿是否逐问保留、没有合并问题或抽象化回答，JD 是否具有正常 Markdown 层级？
 - 是否仅在用户要求复盘时进入复盘，未向清理稿加入分析结论？
