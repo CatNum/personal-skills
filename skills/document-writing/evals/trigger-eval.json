@@ -242,6 +242,24 @@
       }
     },
     {
+      "name": "per_question_headings_reproduce_interviewer_questions_as_interrogatives",
+      "description": "逐题复盘标题必须还原面试官问题并使用疑问句，不能改写为陈述式话题总结。",
+      "prompt": "请基于 @backend-interview.md 生成 Markdown 复盘。现有标题是“PostgreSQL 与 MySQL 的选型差异”和“调度故障后的补投与幂等处理”，请改成面试官当时的问题。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "逐题标题使用面试官问题原意的疑问句",
+          "逐题标题以问号结尾",
+          "例如改写为“PostgreSQL 和 MySQL 有哪些差异？为什么选择 PostgreSQL？”"
+        ],
+        "must_not_do": [
+          "把逐题标题写成“PostgreSQL 与 MySQL 的选型差异”等陈述式话题",
+          "用知识点名称或复盘结论替代面试官问题",
+          "为了改成疑问句而改变原问题含义"
+        ]
+      }
+    },
+    {
       "name": "overview_includes_time_and_question_fields_follow_rule_order",
       "description": "面试概览应包含面试时间/批次；逐题复盘字段顺序应与逐题复盘规则一致。",
       "prompt": "请基于 @round2-interview.md 生成 Markdown + HTML 复盘。面试基础信息里有：技术二面，2026-06 批次。请保证每题复盘字段顺序统一。",
