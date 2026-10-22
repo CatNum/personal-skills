@@ -1,6 +1,6 @@
 ---
 name: transcript-refine
-description: Use when cleaning interview transcripts while preserving the speaker's actual answers, or refining video and livestream course transcripts into first-study reading materials or spoken scripts. For interview analysis and retrospective documents, use document-writing.
+description: Use when cleaning interview transcripts into a question-by-question record that preserves the actual dialogue, answer details, and readable JD structure, or refining video and livestream course transcripts into first-study reading materials or spoken scripts. For interview analysis and retrospective documents, use document-writing.
 ---
 
 # 转写稿清理与精炼
@@ -8,6 +8,8 @@ description: Use when cleaning interview transcripts while preserving the speake
 ## 重点
 
 - **先判断用途**：面试清理保留现场证据；课程精炼保留完整教学内容。
+- **逐问保留**：面试清理按原始顺序逐问逐答，不按主题合并问题，不把回答压成摘要。
+- **JD 可读**：岗位 JD 使用 Markdown 标题、段落和列表分区，不整段缩进或塞入代码块。
 - **保护原稿**：默认另存处理结果，保留原稿与可追溯位置。
 - **按需加载**：只读取命中的场景细则，清理与复盘分别执行。
 
@@ -57,8 +59,9 @@ description: Use when cleaning interview transcripts while preserving the speake
   除非用户明确要求更新该文件。
 - 用原稿时间戳、原始行范围或已有段落编号保留定位依据。
   位置无法可靠获取时说明限制，不把清理后的行号冒充原稿行号。
-- **面试清理稿属于证据整理**：不调用成文模板，
-  不额外加入顶层标题、重点、评分或复盘章节。
+- **面试清理稿属于证据整理**：不加入重点、评分或复盘结论；
+  可以加入标题、岗位 JD 和逐问逐答结构，标题必须来自原始问句，
+  不能用抽象主题替代多个真实问题。
 - **课程稿属于成文材料**：先完成课程内容精炼，
   再读取 `document-writing` 的通用规则与课程学习材料细则组织 Markdown。
   两个 skill 同在 `content-skills` 中；若目标环境缺少后者，
@@ -73,4 +76,5 @@ description: Use when cleaning interview transcripts while preserving the speake
 - 识别纠错是否有依据，原意、顺序和已有说话人是否保留？
 - 面试证据是否保真，课程知识是否完整，是否发生跨场景删改？
 - 是否按请求交付并保护原稿，定位是否真实？
+- 面试稿是否逐问保留、没有合并问题或抽象化回答，JD 是否具有正常 Markdown 层级？
 - 是否仅在用户要求复盘时进入复盘，未向清理稿加入分析结论？
