@@ -80,6 +80,12 @@ Usage notes:
 <location>project</location>
 </skill>
 
+<skill>
+<name>claude-desktop-localization</name>
+<description>Use when checking whether Claude Desktop on macOS is already localized, adding or updating zh-Hans resources, repairing modified ASAR integrity, re-signing the app bundle, or diagnosing startup and Keychain failures after modification.</description>
+<location>project</location>
+</skill>
+
 </available_skills>
 <!-- SKILLS_TABLE_END -->
 

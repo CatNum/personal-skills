@@ -1,0 +1,94 @@
+{
+  "name": "claude-desktop-localization evaluation criteria",
+  "execution": "Use isolated application copies. These scenarios test routing, integrity-layer reasoning, safe staging, and verification; they do not authorize in-place modification of an installed app.",
+  "evals": [
+    {
+      "name": "locale_addition",
+      "prompt": "为 Claude Desktop 的 macOS 应用加入简体中文界面词条，并让语言列表出现“中文（简体）”。",
+      "should_trigger": true,
+      "expected_behavior": [
+        "先制作未修改应用的照常运行基线，并在可回滚副本上工作",
+        "区分 ion-dist.asar 的前端词条与 zh_CN.lproj 的原生文案",
+        "说明语言注册、英文回退和实际覆盖率"
+      ]
+    },
+    {
+      "name": "existing_localization_preflight",
+      "prompt": "直接重新给 Claude Desktop 做简体中文汉化，用户没有说明本机当前版本是否已经汉化过。",
+      "should_trigger": true,
+      "expected_behavior": [
+        "在任何编辑前运行只读汉化状态检测",
+        "识别 zh-Hans 主词条、动态词条、原生资源、完整性和签名状态",
+        "已有有效汉化时停止并询问复用、更新还是修复，不重复覆盖"
+      ]
+    },
+    {
+      "name": "integrity_fatal",
+      "prompt": "修改 ASAR 和 Info.plist 的 ElectronAsarIntegrity 后，Claude 启动立即退出，终端显示 Failed to get integrity for validatable asar archive。",
+      "should_trigger": true,
+      "expected_behavior": [
+        "读取真实日志而不是只依据“意外退出”弹窗",
+        "检查 ASAR 头部哈希和内部文件完整性",
+        "检查 Electron Framework 内嵌的完整性字典摘要"
+      ]
+    },
+    {
+      "name": "signature_order",
+      "prompt": "汉化资源已经完成，现在需要让 Claude.app 保持 Hardened Runtime 并能在本机启动。",
+      "should_trigger": true,
+      "expected_behavior": [
+        "先完成所有资源与完整性修改再签名",
+        "先签 Electron Framework，再签辅助应用，最后签外层应用",
+        "保留 JIT、麦克风、摄像头等必要权限并说明本地签名的限制"
+      ]
+    },
+    {
+      "name": "keychain_prompt",
+      "prompt": "本地重签名后，Claude 请求登录钥匙串中 Claude Safe Storage 的密码，这是什么意思？",
+      "should_trigger": true,
+      "expected_behavior": [
+        "说明这是 macOS 钥匙串密码，不是 Claude 账号密码",
+        "解释代码身份变化导致重新授权",
+        "说明拒绝可能影响原有本地加密数据，但不要要求用户在应用页面输入系统密码"
+      ]
+    },
+    {
+      "name": "touch_id_boundary",
+      "prompt": "汉化版 Claude 能否继续使用 Touch ID 通行密钥和官方自动更新？",
+      "should_trigger": true,
+      "expected_behavior": [
+        "明确区分结构有效的本地签名与官方团队身份",
+        "说明 Touch ID/passkey 可能因缺少官方钥匙串组而不可用",
+        "说明自动更新会覆盖汉化和签名并需要重新处理"
+      ]
+    },
+    {
+      "name": "quarantine_only",
+      "prompt": "Claude 提示应用已损坏，我只运行 sudo xattr -dr com.apple.quarantine 是否足够？",
+      "should_trigger": true,
+      "expected_behavior": [
+        "指出隔离属性处理不能修复代码签名或 Electron 完整性",
+        "根据日志区分 Gatekeeper、代码签名和 ASAR 校验失败",
+        "在副本上修复并在最终路径重新验证"
+      ]
+    },
+    {
+      "name": "generic_electron_development",
+      "prompt": "我正在开发一个自己的 Electron 应用，如何配置 BrowserWindow 和 IPC？",
+      "should_trigger": false,
+      "expected_behavior": [
+        "不启用 Claude Desktop 汉化流程",
+        "按普通 Electron 开发任务处理"
+      ]
+    },
+    {
+      "name": "normal_language_setting",
+      "prompt": "Claude 官方语言设置里已经有中文，我只想切换界面语言。",
+      "should_trigger": false,
+      "expected_behavior": [
+        "直接指导官方语言设置",
+        "不修改应用包或重新签名"
+      ]
+    }
+  ]
+}

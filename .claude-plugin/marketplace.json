@@ -5,7 +5,7 @@
   },
   "metadata": {
     "description": "CatNum personal Agent Skills",
-    "version": "1.1.0"
+    "version": "1.2.0"
   },
   "plugins": [
     {
@@ -35,6 +35,15 @@
       "strict": false,
       "skills": [
         "./skills/ai-code-audit"
+      ]
+    },
+    {
+      "name": "desktop-skills",
+      "description": "Claude Desktop macOS localization, ASAR integrity repair, nested code signing, and startup verification",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./skills/claude-desktop-localization"
       ]
     }
   ]

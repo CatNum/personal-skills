@@ -1,0 +1,4 @@
+interface:
+  display_name: "Claude Desktop 汉化与修复"
+  short_description: "为 Claude Desktop 增加简体中文资源，并修复 ASAR 完整性、嵌套签名和启动失败"
+  default_prompt: "使用 $claude-desktop-localization 在可回滚副本上为 Claude Desktop 配置简体中文，并完成完整性校验、重新签名和启动验证。"

@@ -4,8 +4,9 @@
 
 - **仓库定位**：集中维护 CatNum 自研的个人 Agent Skills，不复制或修改 Anthropic 上游 skill。
 - **使用边界**：个人 skill 从本仓库安装；上游 skill 直接从官方仓库安装，两个来源独立更新。
-- **当前内容**：仓库包含模拟面试、转写稿处理、文档编写与面试复盘，
-  以及项目文档目录管理、AI 生成代码隐患检查与修复能力。
+- **当前内容**：仓库包含模拟面试、转写稿处理、文档编写与面试复盘、
+  项目文档目录管理、AI 生成代码隐患检查与修复，以及 Claude Desktop
+  macOS 汉化与完整性修复能力。
 
 ## 一、仓库说明
 
@@ -22,6 +23,7 @@ Anthropic 官方 skill 不再复制到本仓库，也不在本仓库中二次修
 | `project-structure` | 文件与目录管理；在指定范围统一使用编号、句点和空格排序，保留固定名称，并维护 `docs/` 布局与 PRD、技术方案的一一配对。 |
 | `ai-code-audit` | AI 代码隐患检查与修复；按通用分类检查性能、并发、一致性、身份、反馈及业务边界隐患，并完成最小修复和验证。 |
 | `transcript-refine` | 转写稿清理与精炼；面试稿逐问逐答保留现场回答和细节，JD 使用可读的 Markdown 分区，课程稿保留完整教学知识。 |
+| `claude-desktop-localization` | Claude Desktop macOS 汉化与修复；先检测本机是否已有简体中文资源，再在可回滚副本中汉化，并处理 ASAR 完整性、Electron Framework 摘要、嵌套签名、启动验证和钥匙串影响。 |
 
 ## 三、目录结构
 
@@ -35,7 +37,8 @@ personal-skills/
 │   ├── document-writing/
 │   ├── project-structure/
 │   ├── transcript-refine/
-│   └── ai-code-audit/
+│   ├── ai-code-audit/
+│   └── claude-desktop-localization/
 ├── AGENTS.md
 └── README.md
 ```
@@ -53,6 +56,8 @@ personal-skills/
 本仓库提供 `.claude-plugin/marketplace.json`，用于按类别安装个人 skill。其他工具可直接扫描 `skills/` 下的各个 `SKILL.md`，或通过本地 Skills Manager 统一安装和同步。
 
 - `engineering-skills` 提供 `ai-code-audit`，用于 AI 生成代码的隐形问题排查与修复。
+- `desktop-skills` 提供 `claude-desktop-localization`，用于 Claude Desktop
+  macOS 应用汉化、ASAR 完整性修复与本地重签名。
 - `interview-skills` 提供 `interview-mock`，用于现场模拟面试。
 - `content-skills` 提供 `project-structure`、`transcript-refine` 与
   `document-writing`。面试稿清理与复盘需要安装这一组，
@@ -90,3 +95,20 @@ personal-skills/
 ```
 
 仓库收录与工具安装是两个步骤。未安装时，可明确要求工具读取 `skills/ai-code-audit/SKILL.md` 后执行；需要全局调用时，再安装或同步到目标工具。
+
+### 5.3 Claude Desktop macOS 汉化
+
+`claude-desktop-localization` 只处理用户明确要求的 Claude Desktop 应用包修改。
+开始前先只读检测现有 `zh-Hans` 词条、覆盖率、完整性和签名；已有有效汉化时
+不重复覆盖，而是询问复用、更新或修复。新建汉化时默认从官方原版建立
+`ditto` 副本，在副本中完成翻译、ASAR 头部哈希和
+Electron Framework 完整性字典摘要更新，再从内到外重签名。
+
+验证要求同时覆盖三项：ASAR 文件与摘要匹配、`codesign --verify --deep --strict`
+通过、真实启动日志没有 `:FATAL:`。本地签名不能恢复 Anthropic 官方身份，
+Touch ID 通行密钥、钥匙串授权和自动更新仍需单独说明。
+
+详情见 [技能入口](skills/claude-desktop-localization/SKILL.md)、
+[汉化状态检测脚本](skills/claude-desktop-localization/scripts/detect_localization.py)、
+[完整性校验脚本](skills/claude-desktop-localization/scripts/claude_integrity.py)
+和 [重签名脚本](skills/claude-desktop-localization/scripts/resign_claude_app.py)。
