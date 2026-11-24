@@ -64,7 +64,7 @@ Usage notes:
 
 <skill>
 <name>document-writing</name>
-<description>Use when writing or updating purpose-specific documents, including interview retrospectives with scoring and answer improvements. Markdown for all types; HTML for interview retrospectives.</description>
+<description>Use when writing or updating purpose-specific Markdown documents, including interview retrospectives with scoring and answer improvements.</description>
 <location>global</location>
 </skill>
 

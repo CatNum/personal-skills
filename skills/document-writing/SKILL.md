@@ -1,13 +1,13 @@
 ---
 name: document-writing
-description: Use when writing or updating blogs, roadmaps, product requirements, commercialization plans, design documents, study materials, glossaries, or interview retrospectives from transcripts. Supports Markdown for all types and HTML for interview retrospectives. For transcript cleanup, use transcript-refine.
+description: Use when writing or updating blogs, roadmaps, product requirements, commercialization plans, design documents, study materials, glossaries, or interview retrospectives from transcripts. For transcript cleanup, use transcript-refine.
 ---
 
 # 文档编写
 
 ## 重点
 
-- **目的决定内容**：结合材料与文档用途编写，统一格式按输出形式加载。
+- **目的决定内容**：结合材料与文档用途编写，按统一的 Markdown 规则成文。
 - **按需披露**：只读取当前任务的类型细则、格式规则和必要模板。
 - **面试复盘**：在本 skill 内完成分析与成文；
   原稿清理由 `transcript-refine` 负责。
@@ -24,11 +24,9 @@ description: Use when writing or updating blogs, roadmaps, product requirements,
 - **清理后复盘**：先由 `transcript-refine` 清理，
   再用本 skill 分析并生成新文档；沿用已确认的路径与格式，不重复询问。
 
-所有类型默认 Markdown。仅面试复盘支持用户指定 HTML 或双格式；
-读取 [HTML 复盘规则](references/interview-html.md) 并使用对应模板。
-未指定格式时直接生成 Markdown，不要求先三选一。
-其他类型需要 HTML 或其他格式时，说明当前技能范围并确认交付方式，
-不自行套用面试 HTML 模板。
+所有类型均以 Markdown 成文。未指定格式时直接生成 Markdown。
+同时请求 Markdown 和其他格式时，交付 Markdown 并说明本 skill 的格式范围。
+仅指定其他格式时，说明本 skill 的格式范围并确认是否改用 Markdown。
 
 写入新文件或创建目录前，读取 `project-structure` 的统一命名规则，
 按目标目录分配排序编号；本 skill 只确定主题与用途后缀。
@@ -44,7 +42,7 @@ description: Use when writing or updating blogs, roadmaps, product requirements,
 | --- | --- |
 | 博客：观点或经历 | [博客](references/blog.md) |
 | ROADMAP：版本主要更新与特性总览 | [ROADMAP](references/roadmap.md) |
-| PRD/产品：功能目标、使用方式与规则 | [产品文档](references/product.md) |
+| PRD/产品文档：需求依据、功能目标、使用方式与规则 | [产品细则](references/product.md) |
 | 商业化：商业模式与收费规则 | [商业化](references/commercialization.md) |
 | 设计：产品功能的实现方案与内部逻辑 | [设计文档](references/design.md) |
 | 个人学习笔记 | [学习笔记](references/notes.md) |
@@ -78,10 +76,9 @@ description: Use when writing or updating blogs, roadmaps, product requirements,
   并列要点用无序列表，有顺序或依赖的步骤用有序列表。
   加粗突出关键短语，行内代码标识精确技术文本，引用块标识原文，
   链接连接来源与相关文档。介绍字段、函数时解释含义与作用。
-- **格式按需加载**：生成或整理 Markdown 时必须读取
+- **格式规则**：生成或整理文档时必须读取
   [Markdown 规则](references/markdown.md)，执行标题编号、源码换行、
   代码块、表格、Mermaid 及旧文更新规则。
-  HTML 使用语义标题、列表、强调与引用，不把 Markdown 标记作为正文输出。
 - **保留旧文**：默认保留原意、事实、结构与标题深度，
   仅在结构错误或用户要求重组时作必要调整，并检查受影响的文内链接。
 
@@ -96,5 +93,4 @@ description: Use when writing or updating blogs, roadmaps, product requirements,
 标题与重点是否唯一，编号是否连续，
 分段、分点与强调是否便于阅读，源码或页面是否需要横向滚动，
 旧文语义与引用是否保留，是否存在空章节、占位符或虚构内容。
-面试复盘额外检查证据、评分与改进答案是否区分，
-双格式是否来自同一次分析且内容一致。
+面试复盘额外检查证据、评分与改进答案是否区分。

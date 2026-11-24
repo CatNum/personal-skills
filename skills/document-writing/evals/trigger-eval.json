@@ -32,7 +32,7 @@
     },
     {
       "name": "default_markdown_without_format_gate",
-      "description": "未指定复盘格式时直接生成 Markdown，HTML 和双格式仅按明确请求提供。",
+      "description": "未指定复盘格式时直接生成 Markdown。",
       "prompt": "我有一份模拟面试转写稿 @interview.md，帮我复盘一下。",
       "expected_behavior": {
         "should_trigger": true,
@@ -42,7 +42,7 @@
         ],
         "must_not_do": [
           "要求先选择输出格式才能继续",
-          "未请求时额外生成 HTML"
+          "额外生成其他格式的复盘文件"
         ]
       }
     },
@@ -90,23 +90,23 @@
     },
     {
       "name": "review_output_must_be_new_file_with_expected_name",
-      "description": "复盘文件必须新建，并按原文件名派生命名。",
+      "description": "同时请求 Markdown 和 HTML 时，按原稿派生命名并交付 Markdown，说明支持的格式。",
       "prompt": "请基于 @00. backend-interview.md 生成复盘，我选择 Markdown + HTML。目标目录只有该原稿，输出文件名未指定。",
       "expected_behavior": {
         "should_trigger": true,
         "must_create_files": [
-          "01. backend-interview-复盘.md",
-          "01. backend-interview-复盘.html"
+          "01. backend-interview-复盘.md"
         ],
         "must_include": [
           "复盘文件新建，不能覆盖原稿",
-          "Markdown 与 HTML 内容结构一致，HTML 只增强视觉层级",
-          "读取project-structure，双格式共用编号，原稿不重命名"
+          "说明本 skill 仅交付 Markdown",
+          "读取project-structure并分配编号，原稿不重命名"
         ],
         "must_not_do": [
           "覆盖或重命名 00. backend-interview.md",
           "把复盘内容直接写回原稿",
-          "重复叠加原稿的排序前缀"
+          "重复叠加原稿的排序前缀",
+          "生成 HTML 复盘文件"
         ]
       }
     },
@@ -262,7 +262,7 @@
     {
       "name": "overview_includes_time_and_question_fields_follow_rule_order",
       "description": "面试概览应包含面试时间/批次；逐题复盘字段顺序应与逐题复盘规则一致。",
-      "prompt": "请基于 @round2-interview.md 生成 Markdown + HTML 复盘。面试基础信息里有：技术二面，2026-06 批次。请保证每题复盘字段顺序统一。",
+      "prompt": "请基于 @round2-interview.md 生成 Markdown 复盘。面试基础信息里有：技术二面，2026-06 批次。请保证每题复盘字段顺序统一。",
       "expected_behavior": {
         "should_trigger": true,
         "must_include": [
@@ -282,7 +282,6 @@
         ],
         "must_not_do": [
           "遗漏面试时间或批次",
-          "让 Markdown 和 HTML 模板使用不同字段顺序",
           "把评价放在面试官考点之后"
         ]
       }
@@ -299,6 +298,37 @@
         "must_not_do": [
           "重新评分",
           "索要原稿作为排版前提"
+        ]
+      }
+    },
+    {
+      "name": "product_direction_questions_in_chat",
+      "description": "泛问做产品前要想清楚什么时，直接回答问题即可。",
+      "prompt": "做一个产品要想清楚哪些问题？",
+      "expected_behavior": {
+        "should_trigger": false,
+        "must_include": [
+          "直接在对话中回答"
+        ],
+        "must_not_do": [
+          "套用产品文档模板或创建文件"
+        ]
+      }
+    },
+    {
+      "name": "product_validation_before_promotion",
+      "description": "产品文档涉及推广前验证时，使用产品细则记录已知范围和待验证假设。",
+      "prompt": "请为我的评论筛选插件写一份产品需求文档，包含推广前的验证计划。它只能按关键词筛选当前页面已加载的评论。真实网页兼容性还没验证，也还没人试用。",
+      "expected_behavior": {
+        "should_trigger": true,
+        "must_include": [
+          "保留仅筛选当前已加载评论的范围",
+          "将真实网页兼容性和目标用户价值标为待验证",
+          "先验证筛选流程，再请目标用户带真实任务，观察其相较现有做法的收益、首次成功和复用"
+        ],
+        "must_not_do": [
+          "把功能描述、假设人群或拟定指标写成已验证结果",
+          "擅自决定定价或要求编写技术方案"
         ]
       }
     },
@@ -326,7 +356,8 @@
           "保留个人经历与观点的叙述"
         ],
         "must_not_do": [
-          "强加验收标准或产品规格章节"
+          "强加验收标准或产品规格章节",
+          "套用产品判断清单"
         ]
       }
     },
@@ -359,18 +390,17 @@
       }
     },
     {
-      "name": "html_only_and_escape",
-      "prompt": "仅生成HTML面试复盘，候选人的原话包含 <script>alert(1)</script>，请作为原文引用。",
+      "name": "html_only_requests_markdown_confirmation",
+      "prompt": "请基于 @round2-interview.md 仅生成 HTML 面试复盘。",
       "expected_behavior": {
         "should_trigger": true,
         "must_include": [
-          "仅生成HTML文件",
-          "原文按文字转义而非执行",
-          "语义标题、列表与窄屏换行"
+          "说明本 skill 的面试复盘使用 Markdown",
+          "确认用户是否接受 Markdown"
         ],
         "must_not_do": [
-          "额外生成Markdown文件",
-          "将用户原话当可执行脚本"
+          "生成 HTML 文件",
+          "未经用户同意生成 Markdown 文件"
         ]
       }
     },
